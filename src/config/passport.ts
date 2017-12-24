@@ -133,6 +133,7 @@ passport.use(new FacebookStrategy({
 /**
  * Sign in with GitHub.
  */
+//  TODO: TEST
 passport.use(new GitHubStrategy({
   clientID: process.env.GITHUB_ID,
   clientSecret: process.env.GITHUB_SECRET,
@@ -168,7 +169,7 @@ passport.use(new GitHubStrategy({
       User.findOne({ email: profile._json.email }, (err, existingEmailUser) => {
         if (err) { return done(err); }
         if (existingEmailUser) {
-          req.flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with GitHub manually from Account Settings.' });
+          profile.flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with GitHub manually from Account Settings.' });
           done(err);
         } else {
           const user:any = new User();
