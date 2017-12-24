@@ -20,7 +20,7 @@ const MongoStore = mongo(session);
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
  */
-dotenv.config({ path: ".env.example" });
+dotenv.config({ path: ".env" });
 
 
 /**
@@ -44,15 +44,36 @@ const app = express();
 /**
  * Connect to MongoDB.
  */
+
+var options = {
+  "server" : {
+    "socketOptions" : {
+      "keepAlive" : 300000,
+      "connectTimeoutMS" : 30000
+    }
+  },
+  "replset" : {
+    "socketOptions" : {
+      "keepAlive" : 300000,
+      "connectTimeoutMS" : 30000
+    }
+  }
+}
+
+
 // mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI);
+mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI, options);
+
+
 
 mongoose.connection.on("error", () => {
   console.log("MongoDB connection error. Please make sure MongoDB is running.");
   process.exit();
 });
 
-
+mongoose.connection.on("open", () => {
+  console.log("MongoDB is connected.");
+});
 
 /**
  * Express configuration.
@@ -126,12 +147,20 @@ app.get("/account/unlink/:provider", passportConfig.isAuthenticated, userControl
 app.get("/api", apiController.getApi);
 app.get("/api/facebook", passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getFacebook);
 
+
 /**
  * OAuth authentication routes. (Sign in)
  */
-app.get("/auth/facebook", passport.authenticate("facebook", { scope: ["email", "public_profile"] }));
-app.get("/auth/facebook/callback", passport.authenticate("facebook", { failureRedirect: "/login" }), (req, res) => {
-  res.redirect(req.session.returnTo || "/");
+
+app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email', 'public_profile'] }));
+app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login' }), (req, res) => {
+  res.redirect(req.session.returnTo || '/');
 });
+
+
+/**
+ * OAuth authorization routes. (API examples)
+ */
+
 
 module.exports = app;
