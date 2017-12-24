@@ -9,6 +9,12 @@ export type UserModel = mongoose.Document & {
   passwordResetExpires: Date,
 
   facebook: string,
+  twitter: String,
+  google: String,
+  github: String,
+  instagram: String,
+  linkedin: String,
+  steam: String,
   tokens: AuthToken[],
 
   profile: {
