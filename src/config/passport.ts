@@ -136,16 +136,15 @@ passport.use(new FacebookStrategy({
 passport.use(new GitHubStrategy({
   clientID: process.env.GITHUB_ID,
   clientSecret: process.env.GITHUB_SECRET,
-  callbackURL: '/auth/github/callback',
-  passReqToCallback: true
-}, (req:any, accessToken:any, refreshToken:any, profile:any, done:any) => {
-  if (req.user) {
+  callbackURL: "/auth/github/callback"
+}, (accessToken:any, refreshToken:any, profile:any, done:any)=>{
+  if (profile.user) {
     User.findOne({ github: profile.id }, (err, existingUser) => {
       if (existingUser) {
-        req.flash('errors', { msg: 'There is already a GitHub account that belongs to you. Sign in with that account or delete it, then link it with your current account.' });
+        profile.flash('errors', { msg: 'There is already a GitHub account that belongs to you. Sign in with that account or delete it, then link it with your current account.' });
         done(err);
       } else {
-        User.findById(req.user.id, (err, user:any) => {
+        User.findById(profile.user.id, (err, user:any) => {
           if (err) { return done(err); }
           user.github = profile.id;
           user.tokens.push({ kind: 'github', accessToken });
@@ -154,7 +153,7 @@ passport.use(new GitHubStrategy({
           user.profile.location = user.profile.location || profile._json.location;
           user.profile.website = user.profile.website || profile._json.blog;
           user.save((err:any) => {
-            req.flash('info', { msg: 'GitHub account has been linked.' });
+            profile.flash('info', { msg: 'GitHub account has been linked.' });
             done(err, user);
           });
         });
