@@ -11,7 +11,7 @@ import * as Twit from 'twit';
  * GET /api
  * List of API examples.
  */
-exports.getApi = (req: Request, res: Response) => {
+export const getApi = (req: Request, res: Response) => {
   res.render("api/index", {
     title: "API Examples"
   });
@@ -21,7 +21,7 @@ exports.getApi = (req: Request, res: Response) => {
  * GET /api/facebook
  * Facebook API example.
  */
-exports.getFacebook = (req: Request, res: Response, next: NextFunction) => {
+export const getFacebook = (req: Request, res: Response, next: NextFunction) => {
   const token = req.user.tokens.find((token: any) => token.kind === "facebook");
   graph.setAccessToken(token.accessToken);
   graph.get(`${req.user.facebook}?fields=id,name,email,first_name,last_name,gender,link,locale,timezone`, (err: Error, results: graph.FacebookUser) => {
@@ -38,7 +38,7 @@ exports.getFacebook = (req: Request, res: Response, next: NextFunction) => {
  * GET /api/twitter
  * Twitter API example.
  */
-exports.getTwitter = (req:any, res:any, next:any) => {
+export const getTwitter = (req:any, res:any, next:any) => {
   const token = req.user.tokens.find((token: any) => token.kind === 'twitter');
   const T = new Twit({
     consumer_key: process.env.TWITTER_KEY,
@@ -59,7 +59,7 @@ exports.getTwitter = (req:any, res:any, next:any) => {
  * POST /api/twitter
  * Post a tweet.
  */
-exports.postTwitter = (req:any, res:any, next:any) => {
+export const postTwitter = (req:any, res:any, next:any) => {
   req.assert('tweet', 'Tweet cannot be empty').notEmpty();
 
   const errors = req.validationErrors();
