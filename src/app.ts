@@ -183,5 +183,14 @@ app.get('/api/isAuthenticated', (req, res)=>{
  res.send(session.passport);
 })
   
+/**
+ * If routes need to be authenticated or authorized...
+ * app.route('/api/twitter')
+  .all(passportConfig.isAuthenticated)
+  .all(passportConfig.isAuthorized)
+  .get(apiController.getTwitter)
+  .post(apiController.postTwitter)
+ * 
+ */
 
 module.exports = app;
