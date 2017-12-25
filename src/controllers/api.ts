@@ -1,5 +1,3 @@
-"use strict";
-
 import * as async from "async";
 import * as request from "request";
 import * as graph from "fbgraph";

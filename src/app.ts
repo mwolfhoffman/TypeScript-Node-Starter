@@ -16,6 +16,7 @@ import * as passport from "passport";
 import expressValidator = require("express-validator");
 
 import { getApi, getFacebook, getTwitter, postTwitter} from './controllers/api'
+import { Request, Response, NextFunction } from "express";
 
 const MongoStore = mongo(session);
 
