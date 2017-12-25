@@ -11,7 +11,6 @@ import * as path from "path";
 import * as mongoose from "mongoose";
 import * as passport from "passport";
 import expressValidator = require("express-validator");
-import ControllerRouter from './controllers'
 import { getFacebook, getTwitter, postTwitter} from './controllers/api'
 import { Request, Response, NextFunction } from "express";
 
@@ -179,7 +178,6 @@ app.post('/api/twitter', passportConfig.isAuthenticated, passportConfig.isAuthor
   
 
 app.use('/api/v1',APIRouter.router);
-app.use(ControllerRouter);
 
 
 
