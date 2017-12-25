@@ -1,6 +1,3 @@
-/**
- * Module dependencies.
- */
 import * as express from "express";
 import * as compression from "compression";  // compresses requests
 import * as session from "express-session";
@@ -14,9 +11,12 @@ import * as path from "path";
 import * as mongoose from "mongoose";
 import * as passport from "passport";
 import expressValidator = require("express-validator");
-
+import ControllerRouter from './controllers'
 import { getFacebook, getTwitter, postTwitter} from './controllers/api'
 import { Request, Response, NextFunction } from "express";
+
+/* API ROUTES */
+const APIRouter = require('./API');
 
 const MongoStore = mongo(session);
 
@@ -176,13 +176,13 @@ app.get('/auth/twitter/callback', passport.authenticate('twitter', { failureRedi
 });
 app.get('/api/twitter', passportConfig.isAuthenticated, passportConfig.isAuthorized, getTwitter);
 app.post('/api/twitter', passportConfig.isAuthenticated, passportConfig.isAuthorized, postTwitter);
-
-app.get('/api/isAuthenticated', (req, res)=>{
-//  var auth = passportConfig.isAuthenticated
- var session = req.session;
- res.send(session.passport);
-})
   
+
+app.use('/api/v1',APIRouter.router);
+app.use(ControllerRouter);
+
+
+
 /**
  * If routes need to be authenticated or authorized...
  * app.route('/api/twitter')

@@ -7,8 +7,10 @@
 
 import * as  fs from 'fs';
 import * as path from 'path';
+import * as express from 'express';
+import { debug } from 'util';
 
-exports.router = require('express').Router();
+const ControllerRouter = express.Router();
 
 let files = fs.readdirSync(__dirname);
 
@@ -21,5 +23,7 @@ files.forEach((file:any)=>{
 
   if (!controller.router) return;
 
-  exports.router.use(controller.mountPath || '', controller.router);
+  ControllerRouter.use(controller.mountPath || '', controller.router);
 });
+
+export default ControllerRouter;
