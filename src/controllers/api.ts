@@ -5,15 +5,6 @@ import { Response, Request, NextFunction } from "express";
 
 import * as Twit from 'twit';
 
-/**
- * GET /api
- * List of API examples.
- */
-export const getApi = (req: Request, res: Response) => {
-  res.render("api/index", {
-    title: "API Examples"
-  });
-};
 
 /**
  * GET /api/facebook

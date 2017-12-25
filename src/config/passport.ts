@@ -368,7 +368,7 @@ passport.use(new GoogleStrategy({
  */
 export let isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
   if (req.isAuthenticated()) {
-    return next();
+    return next(res);
   }
   res.redirect("/login");
 };
@@ -380,7 +380,7 @@ export let isAuthorized = (req: Request, res: Response, next: NextFunction) => {
   const provider = req.path.split("/").slice(-1)[0];
 
   if (_.find(req.user.tokens, { kind: provider })) {
-    next();
+    next(res);
   } else {
     res.redirect(`/auth/${provider}`);
   }
